@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+      args:
+        USER_ID: ${USER_ID:-1000}
+        GROUP_ID: ${GROUP_ID:-1000}
+        USERNAME: ${USERNAME:-appuser}
+    volumes:
+      - .:/home/${USERNAME:-appuser}/app
+    environment:
+      - TZ=Asia/Tokyo
+    working_dir: /home/${USERNAME:-appuser}/app
+    tty: true
+    stdin_open: true
+    # 必要に応じてポートフォワーディングを追加
+    # ports:
+    #   - "8000:8000"
+
+  # 必要に応じて他のサービスを追加（DB、キャッシュなど）
+  # db:
+  #   image: postgres:14
+  #   environment:
+  #     - POSTGRES_PASSWORD=postgres
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_DB=app
+  #   volumes:
+  #     - db_data:/var/lib/postgresql/data
+
+# 必要に応じてボリュームを定義
+# volumes:
+#   db_data:
